@@ -16,6 +16,8 @@ jobs:
           cache: yarn
       - name: Install Modules
         run: yarn install --immutable
+      - name: Installing Playwright
+        run: yarn install playwright
       - name: Checking for Linting Issues
         run: yarn lint
       - name: Unit Tests

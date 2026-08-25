@@ -28,6 +28,7 @@ jobs:
         env:
           CI: true
       - name: Upload E2E Trace
+        if: failure()
         uses: actions/upload-artifact@v7
         with:
           name: playwright-traces

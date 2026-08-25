@@ -4,6 +4,9 @@ on:
   push:
   workflow_dispatch:
 
+env:
+  CI: ${{ vars.CI }}
+
 jobs:
   deployment:
     runs-on: ubuntu-latest
@@ -24,8 +27,6 @@ jobs:
       - name: Unit Tests
         run: yarn test:unit
       - name: E2E Tests
-        env:
-          CI: ${{ vars.CI }}
         run: yarn test:e2e
       - name: Building
         run: yarn build

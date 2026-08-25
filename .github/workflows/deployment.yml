@@ -17,7 +17,7 @@ jobs:
       - name: Install Modules
         run: yarn install --immutable
       - name: Install Playwright
-        run: yarn playwright install
+        run: npx playwright install --with-deps
       - name: Checking for Linting Issues
         run: yarn lint
       - name: Unit Tests

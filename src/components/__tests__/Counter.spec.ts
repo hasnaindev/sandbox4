@@ -1,13 +1,13 @@
 import { describe, it, expect } from 'vitest'
 
 import { mount } from '@vue/test-utils'
-import Counter from '../Counter.vue'
+import AppCounter from '../AppCounter.vue'
 
-describe('Counter', () => {
+describe('AppCounter', () => {
   it('renders properly', () => {
     const initialCount = 10
 
-    const wrapper = mount(Counter, { props: { initialCount } })
+    const wrapper = mount(AppCounter, { props: { initialCount } })
     expect(wrapper.text()).toContain(`Clicks: ${initialCount}`)
   })
 })

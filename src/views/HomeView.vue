@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import Counter from '@/components/Counter.vue'
+import AppCounter from '@/components/AppCounter.vue'
 </script>
 
 <template>
   <main>
     <h1>Home Page</h1>
-    <Counter />
+    <AppCounter />
   </main>
 </template>

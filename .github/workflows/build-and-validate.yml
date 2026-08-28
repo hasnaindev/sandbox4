@@ -3,7 +3,7 @@ name: Build and Validate
 on: workflow_call
 
 jobs:
-  validate:
+  build-and-validate:
     runs-on: ubuntu-latest
     steps:
       - name: Get Code

@@ -1,6 +1,11 @@
 name: Build and Validate
 
-on: workflow_call
+on:
+  workflow_call:
+    inputs:
+      cache-build:
+        type: boolean
+        required: true
 
 jobs:
   build-and-validate:
@@ -26,6 +31,7 @@ jobs:
       - name: Build App
         run: yarn build
       - name: Cache Build
+        if: ${{ inputs.cache-build == true }}
         uses: actions/cache/save@v6
         with:
           path: dist

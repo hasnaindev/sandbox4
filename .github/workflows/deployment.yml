@@ -13,6 +13,8 @@ on:
 jobs:
   build-and-validate:
     uses: ./.github/workflows/build-and-validate.yml
+    with:
+      cache-build: true
 
   deployment:
     runs-on: ubuntu-latest

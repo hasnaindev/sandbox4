@@ -1,0 +1,43 @@
+name: Build and Validate
+
+on: workflow_call
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Code
+        uses: actions/checkout@v7
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: yarn
+      - name: Install Yarn
+        run: corepack enable
+      - name: Install Modules
+        run: yarn install --immutable
+      - name: Checking for Linting Issues
+        run: yarn lint
+      - name: Unit Test
+        run: yarn test:unit
+      - name: Install Playwright
+        run: npx playwright install --with-deps
+      - name: Build App
+        run: yarn build
+      - name: Cache Build
+        uses: actions/cache/save@v6
+        with:
+          path: /dist
+          key: ${{ runner.os }} ${{ hashFiles('**/yarn.lock') }}
+      - name: E2E Test
+        run: yarn test:e2e
+        env:
+          CI: true
+      - name: Upload E2E Trace
+        if: failure()
+        uses: actions/artifact-upload@v7
+        with:
+          name: playwright-traces
+          path: test-results/
+          retention-days: 1

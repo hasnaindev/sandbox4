@@ -2,39 +2,23 @@ name: Deployment
 
 on:
   push:
+    branches:
+      - feature/**
+      - fix/**
+      - develop
+      - master
+
   workflow_dispatch:
 
 jobs:
   deployment:
     runs-on: ubuntu-latest
     steps:
-      - name: Get Code
-        uses: actions/checkout@v7
-      - name: Install Node
-        uses: actions/setup-node@v7
+      - uses: ./.github/workflows/validate.yml
+      - name: Restore Build
+        uses: actions/cache/restore@v6
         with:
-          node-version: 24
-          cache: yarn
-      - name: Install Modules
-        run: yarn install --immutable
-      - name: Install Playwright
-        run: npx playwright install --with-deps
-      - name: Checking for Linting Issues
-        run: yarn lint
-      - name: Unit Tests
-        run: yarn test:unit
-      - name: Building
-        run: yarn build
-      - name: E2E Tests
-        run: yarn test:e2e
-        env:
-          CI: true
-      - name: Upload E2E Trace
-        if: failure()
-        uses: actions/upload-artifact@v7
-        with:
-          name: playwright-traces
-          path: test-results/
-          retention-days: 1
-      - name: Status
-        run: echo "Success!"
+          path: /dist
+          key: ${{ runner.os }} ${{ hashFiles('**/yarn.lock') }}
+      - name: Deployment
+        run: echo "Deployment Successful!"

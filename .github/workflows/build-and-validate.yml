@@ -28,8 +28,8 @@ jobs:
       - name: Cache Build
         uses: actions/cache/save@v6
         with:
-          path: /dist
-          key: ${{ runner.os }} ${{ hashFiles('**/yarn.lock') }}
+          path: dist
+          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
       - name: E2E Test
         run: yarn test:e2e
         env:

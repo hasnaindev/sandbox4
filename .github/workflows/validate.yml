@@ -5,6 +5,7 @@ on:
 
 jobs:
   validate:
+    name: Validate App
     runs-on: ubuntu-latest
     steps:
       - name: Get Code

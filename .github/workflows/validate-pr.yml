@@ -2,7 +2,14 @@ name: Validate PR
 
 on:
   pull_request:
-    types: [opened, synchronize]
+    types:
+      - opened
+      - synchronize
+    branches:
+      - master
+      - develop
+      - fix/**
+      - feature/**
 
 jobs:
   validate:

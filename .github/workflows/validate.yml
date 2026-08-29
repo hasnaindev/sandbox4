@@ -1,0 +1,32 @@
+name: Validate
+
+on: workflow_call
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Code
+        uses: actions/checkout@v7
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: yarn
+      - name: Setup Yarn
+        run: corepack enable
+      - name: Setup Modules
+        run: yarn install --immutable
+      - name: Get Build From Cache
+        uses: actions/restore/cache@v6
+        with:
+          path: dist
+          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+      - name: Test Lint
+        run: yarn lint
+      - name: Setup Playwright
+        run: npx playwright install --with-deps
+      - name: Unit Test
+        run: yarn test:unit
+      - name: E2E Test
+        run: yarn test:e2e

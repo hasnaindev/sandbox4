@@ -3,9 +3,6 @@ name: Deployment
 on:
   push:
     branches:
-      - feature/**
-      - fix/**
-      - develop
       - master
 
   workflow_dispatch:

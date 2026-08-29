@@ -16,6 +16,6 @@ defineProps<ComponentProps>()
 
 <template>
   <ul v-for="{ id, name, price } in products" :key="id">
-    <li>Name: {{ name }} - Price: {{ price }}</li>
+    <li>Name: {{ name }}, Price: {{ price }}</li>
   </ul>
 </template>

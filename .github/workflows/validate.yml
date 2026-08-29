@@ -2,11 +2,6 @@ name: Validate
 
 on:
   workflow_call:
-    inputs:
-      cache-key:
-        description: 'Cache key used to restore the dist folder'
-        required: true
-        type: string
 
 jobs:
   validate:

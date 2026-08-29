@@ -11,20 +11,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    name: Build App
-    uses: ./.github/workflows/build.yml
-    permissions:
-      contents: read
-      id-token: write
-
   validate:
     name: Validate App
-    needs: build
     uses: ./.github/workflows/validate.yml
-    permissions:
-      contents: read
-      id-token: write
 
   deployment:
     name: Deploy App
@@ -33,10 +22,16 @@ jobs:
     steps:
       - name: Get Code
         uses: actions/checkout@v7
-      - name: Restore Build
-        uses: actions/cache/restore@v6
+      - name: Setup Node
+        uses: actions/setup-node@v7
         with:
-          path: dist
-          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          node-version: 24
+          cache: yarn
+      - name: Setup Yarn
+        run: corepack enable
+      - name: Setup Modules
+        run: yarn install --immutable
+      - name: Build
+        run: yarn build
       - name: Deployment
         run: echo "Deployment Successful!"

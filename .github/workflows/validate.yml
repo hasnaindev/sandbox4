@@ -1,6 +1,12 @@
 name: Validate
 
-on: workflow_call
+on:
+  workflow_call:
+    inputs:
+      cache-key:
+        description: 'Cache key used to restore the dist folder'
+        required: true
+        type: string
 
 jobs:
   validate:
@@ -17,16 +23,22 @@ jobs:
         run: corepack enable
       - name: Setup Modules
         run: yarn install --immutable
-      - name: Get Build From Cache
-        uses: actions/cache/restore@v6
-        with:
-          path: dist
-          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
       - name: Test Lint
         run: yarn lint
-      - name: Setup Playwright
-        run: npx playwright install --with-deps
       - name: Unit Test
         run: yarn test:unit
+      - name: Build
+        run: yarn build
+      - name: Setup Playwright
+        run: npx playwright install --with-deps
       - name: E2E Test
         run: yarn test:e2e
+        env:
+          CI: true
+      - name: Upload E2E Trace
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-traces
+          path: test-results/
+          retention-days: 1

@@ -18,7 +18,7 @@ jobs:
       - name: Setup Modules
         run: yarn install --immutable
       - name: Get Build From Cache
-        uses: actions/restore/cache@v6
+        uses: actions/cache/restore@v6
         with:
           path: dist
           key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}

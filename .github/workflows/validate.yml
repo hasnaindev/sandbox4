@@ -25,6 +25,12 @@ jobs:
         run: yarn test:unit
       - name: Build
         run: yarn build
+      - name: Upload Build
+        uses: actions/upload-artifact@v7
+        with:
+          path: dist
+          name: app-build
+          retention-days: 1
       - name: Setup Playwright
         run: npx playwright install --with-deps
       - name: E2E Test

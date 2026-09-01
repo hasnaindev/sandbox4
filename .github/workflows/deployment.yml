@@ -13,7 +13,7 @@ on:
 jobs:
   validate:
     name: Validate App
-    uses: ./.github/workflows/calls/validate.yml
+    uses: ./.github/workflows/validate.yml
 
   deployment:
     name: Deploy App

@@ -15,4 +15,4 @@ on:
 jobs:
   validate:
     name: Validate PR
-    uses: ./.github/workflows/calls/validate.yml
+    uses: ./.github/workflows/validate.yml

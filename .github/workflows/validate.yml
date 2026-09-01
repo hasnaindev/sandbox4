@@ -7,6 +7,8 @@ jobs:
   validate:
     name: Validate App
     runs-on: ubuntu-latest
+    outputs:
+      build-cache-key: ${{ steps.key-gen.outputs.build }}
     steps:
       - name: Get Code
         uses: actions/checkout@v7
@@ -25,12 +27,12 @@ jobs:
         run: yarn test:unit
       - name: Build
         run: yarn build
-      - name: Upload Build
-        uses: actions/upload-artifact@v7
-        with:
-          path: dist
-          name: app-build
-          retention-days: 1
+      # - name: Upload Build
+      #   uses: actions/upload-artifact@v7
+      #   with:
+      #     path: dist
+      #     name: app-build
+      #     retention-days: 1
       - name: Setup Playwright
         run: npx playwright install --with-deps
       - name: E2E Test
@@ -44,3 +46,15 @@ jobs:
           name: playwright-traces
           path: test-results/
           retention-days: 1
+      - name: Generate Build Cache Key
+        id: key-gen
+        run: |
+          echo "build=${{ github.sha }}-$(/bin/date -u "+%Y%m%d-%H%M%S") >> $GITHUB_OUTPUT"
+          echo "Cache key: ${{ steps.key-gen.outputs.build }}"
+      - name: Cache Build
+        uses: actions/cache/save@v5
+        with:
+          key: ${{ steps.key-gen.outputs.build }}
+          path: |
+            dist
+            node_modules

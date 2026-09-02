@@ -2,10 +2,10 @@ name: Validate
 
 on:
   workflow_call:
-  outputs:
-    build-cache-key:
-      value: ${{ jobs.validate.outputs.build-cache-key }}
-      description: Cache key, used to restore build cache
+    outputs:
+      build-cache-key:
+        description: 'Cache key, used to restore build cache'
+        value: ${{ jobs.validate.outputs.build-cache-key }}
 
 jobs:
   validate:

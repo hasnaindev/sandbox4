@@ -42,7 +42,7 @@ jobs:
       - name: Build
         run: npm run build
       - name: Setup Playwright
-        run: npx playwright install --with-deps --only-shell chromium
+        run: npx playwright install --with-deps --only-shell
       - name: E2E Test
         run: npm run test:e2e
         env:

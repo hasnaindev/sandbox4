@@ -34,7 +34,7 @@ jobs:
           node-version: 24
           cache: npm
       - name: Setup Modules
-        if: ${{ steps.modules-cache.outputs.cache-hit != true }}
+        if: ${{ steps.modules-cache.outputs.cache-hit != 'true' }}
         run: npm ci
       - name: Test Lint
         run: npm run lint

@@ -30,12 +30,17 @@ jobs:
       - name: Setup Yarn
         run: corepack enable
       - name: Restore Build
-        uses: actions/cache/restore@v5
+        uses: actions/cache/restore@v6
         with:
+          fail-on-cache-miss: true
           key: ${{ needs.validate.outputs.build-cache-key }}
-          path: |
-            dist
-            node_modules
+          path: dist
+      - name: Restore Modules
+        uses: actions/cache/restore@v6
+        with:
+          fail-on-cache-miss: true
+          key: ${{ needs.validate.outputs.modules-cache-key }}
+          path: node_modules
       - name: Outputs Contents
         run: ls
       - name: Deployment

@@ -6,6 +6,15 @@ on:
       build-cache-key:
         description: 'Cache key, used to restore build cache'
         value: ${{ jobs.validate.outputs.build-cache-key }}
+      build-cache-hit:
+        description: 'Build cache was hit'
+        value: ${{ jobs.validate.outputs.build-cache-hit }}
+      modules-cache-key:
+        description: 'Cache key, used to restore modules cache'
+        value: ${{ jobs.validate.outputs.modules-cache-key }}
+      modules-cache-hit:
+        description: 'Modules cache was hit'
+        value: ${{ jobs.validate.outputs.modules-cache-hit }}
 
 jobs:
   validate:
@@ -13,6 +22,9 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       build-cache-key: ${{ steps.key-gen.outputs.build }}
+      build-cache-hit: ${{ steps.build-cache.outputs.cache-hit }}
+      modules-cache-key: ${{ steps.key-gen.outputs.modules }}
+      modules-cache-hit: ${{ steps.modules-cache.outputs.cache-hit }}
     steps:
       - name: Get Code
         uses: actions/checkout@v7
@@ -24,6 +36,7 @@ jobs:
       - name: Setup Yarn
         run: corepack enable
       - name: Setup Modules
+        if: ${{ steps.modules-cache.outputs.cache-hit != true }}
         run: yarn install --immutable
       - name: Test Lint
         run: yarn lint
@@ -31,12 +44,6 @@ jobs:
         run: yarn test:unit
       - name: Build
         run: yarn build
-      # - name: Upload Build
-      #   uses: actions/upload-artifact@v7
-      #   with:
-      #     path: dist
-      #     name: app-build
-      #     retention-days: 1
       - name: Setup Playwright
         run: npx playwright install --with-deps
       - name: E2E Test
@@ -53,13 +60,23 @@ jobs:
       - name: Generate Build Cache Key
         id: key-gen
         run: |
-          build_cache_key="build=${{ github.sha }}-$(/bin/date -u "+%Y%m%d-%H%M%S")"
+          build_cache_key="build=build-${{ github.sha }}-$(/bin/date -u "+%Y%m%d-%H%M%S")"
+          modules_cache_key="modules=modules-${{ hashFiles('**/yarn.lock') }}"
+
           echo $build_cache_key >> $GITHUB_OUTPUT
-          echo "Cache key: $build_cache_key"
+          echo $modules_cache_key >> $GITHUB_OUTPUT
+
+          echo "Build cache key: $build_cache_key"
+          echo "Modules cache key: $build_cache_key"
       - name: Cache Build
-        uses: actions/cache/save@v5
+        id: build-cache
+        uses: actions/cache/save@v6
         with:
           key: ${{ steps.key-gen.outputs.build }}
-          path: |
-            dist
-            node_modules
+          path: dist
+      - name: Cache Modules
+        id: modules-cache
+        uses: actions/cache/save@v6
+        with:
+          key: ${{ steps.key-gen.outputs.modules }}
+          path: node_modules

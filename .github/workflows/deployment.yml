@@ -29,15 +29,13 @@ jobs:
           cache: yarn
       - name: Setup Yarn
         run: corepack enable
-      - name: Setup Modules
-        run: yarn install --immutable
-      - name: Build
-        run: yarn build
-      # - name: Restore Build
-      #   uses: actions/download-artifact@v7
-      #   with:
-      #     name: app-build
-      #     path: dist
+      - name: Restore Build
+        uses: actions/cache/restore@v5
+        with:
+          key: ${{ needs.validate.outputs.build-cache-key }}
+          path: |
+            dist
+            node_modules
       - name: Outputs Contents
         run: ls
       - name: Deployment

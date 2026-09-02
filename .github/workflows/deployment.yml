@@ -25,7 +25,8 @@ jobs:
         with:
           node-version: 24
           cache: yarn
-          enable-corepack: true
+      - name: Setup Yarn
+        run: corepack enable
       - name: Get Code
         uses: actions/checkout@v7
       - name: Restore Build

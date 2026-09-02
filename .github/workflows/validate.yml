@@ -33,8 +33,7 @@ jobs:
         with:
           node-version: 24
           cache: yarn
-      - name: Setup Yarn
-        run: corepack enable
+          enable-corepack: true
       - name: Setup Modules
         if: ${{ steps.modules-cache.outputs.cache-hit != true }}
         run: yarn install --immutable

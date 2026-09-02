@@ -49,9 +49,9 @@ jobs:
       - name: Generate Build Cache Key
         id: key-gen
         run: |
-          build-cache-key="build=${{ github.sha }}-$(/bin/date -u "+%Y%m%d-%H%M%S")"
-          echo $build-cache-key >> $GITHUB_OUTPUT
-          echo "Cache key: $build-cache-key"
+          build_cache_key="build=${{ github.sha }}-$(/bin/date -u "+%Y%m%d-%H%M%S")"
+          echo $build_cache_key >> $GITHUB_OUTPUT
+          echo "Cache key: $build_cache_key"
       - name: Cache Build
         uses: actions/cache/save@v5
         with:
